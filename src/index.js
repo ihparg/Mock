@@ -37,7 +37,7 @@ var Parser = require('./parser')
 var Random = require('./random/')
 var RE = require('./regexp')
 
-var Handler = {
+var Mock = {
     extend: Util.extend
 }
 
@@ -53,7 +53,7 @@ var Handler = {
         path, templatePath
         root, templateRoot
 */
-Handler.gen = function(template, name, context) {
+Mock.gen = function(template, name, context) {
     /* jshint -W041 */
     name = name == undefined ? '' : (name + '')
 
@@ -77,8 +77,8 @@ Handler.gen = function(template, name, context) {
     var type = Util.type(template)
     var data
 
-    if (Handler[type]) {
-        data = Handler[type]({
+    if (Mock[type]) {
+        data = Mock[type]({
             // 属性值类型
             type: type,
             // 属性值模板
@@ -101,7 +101,7 @@ Handler.gen = function(template, name, context) {
     return template
 }
 
-Handler.extend({
+Mock.extend({
     array: function(options) {
         var result = [],
             i, ii;
@@ -117,7 +117,7 @@ Handler.extend({
                 options.context.path.push(i)
                 options.context.templatePath.push(i)
                 result.push(
-                    Handler.gen(options.template[i], i, {
+                    Mock.gen(options.template[i], i, {
                         path: options.context.path,
                         templatePath: options.context.templatePath,
                         currentContext: result,
@@ -136,7 +136,7 @@ Handler.extend({
                 options.context.path.push(options.name)
                 options.context.templatePath.push(options.name)
                 result = Random.pick(
-                    Handler.gen(options.template, undefined, {
+                    Mock.gen(options.template, undefined, {
                         path: options.context.path,
                         templatePath: options.context.templatePath,
                         currentContext: result,
@@ -154,7 +154,7 @@ Handler.extend({
 
                     options.context.path.push(options.name)
                     options.context.templatePath.push(options.name)
-                    result = Handler.gen(options.template, undefined, {
+                    result = Mock.gen(options.template, undefined, {
                         path: options.context.path,
                         templatePath: options.context.templatePath,
                         currentContext: result,
@@ -178,7 +178,7 @@ Handler.extend({
                             options.context.path.push(result.length)
                             options.context.templatePath.push(ii)
                             result.push(
-                                Handler.gen(options.template[ii], result.length, {
+                                Mock.gen(options.template[ii], result.length, {
                                     path: options.context.path,
                                     templatePath: options.context.templatePath,
                                     currentContext: result,
@@ -211,7 +211,7 @@ Handler.extend({
                 parsedKey = key.replace(Constant.RE_KEY, '$1')
                 options.context.path.push(parsedKey)
                 options.context.templatePath.push(key)
-                result[parsedKey] = Handler.gen(options.template[key], key, {
+                result[parsedKey] = Mock.gen(options.template[key], key, {
                     path: options.context.path,
                     templatePath: options.context.templatePath,
                     currentContext: result,
@@ -249,7 +249,7 @@ Handler.extend({
                 parsedKey = key.replace(Constant.RE_KEY, '$1')
                 options.context.path.push(parsedKey)
                 options.context.templatePath.push(key)
-                result[parsedKey] = Handler.gen(options.template[key], key, {
+                result[parsedKey] = Mock.gen(options.template[key], key, {
                     path: options.context.path,
                     templatePath: options.context.templatePath,
                     currentContext: result,
@@ -325,7 +325,7 @@ Handler.extend({
                     continue
                 }
 
-                phed = Handler.placeholder(ph, options.context.currentContext, options.context.templateCurrentContext, options)
+                phed = Mock.placeholder(ph, options.context.currentContext, options.context.templateCurrentContext, options)
 
                 // 只有一个占位符，并且没有其他字符
                 if (placeholders.length === 1 && ph === result && typeof phed !== typeof result) { // 
@@ -379,7 +379,7 @@ Handler.extend({
     }
 })
 
-Handler.extend({
+Mock.extend({
     _all: function() {
         var re = {};
         for (var key in Random) re[key.toLowerCase()] = key
@@ -435,7 +435,7 @@ Handler.extend({
             (placeholder !== templateContext[key]) // fix #15 避免自己依赖自己
         ) {
             // 先计算被引用的属性值
-            templateContext[key] = Handler.gen(templateContext[key], key, {
+            templateContext[key] = Mock.gen(templateContext[key], key, {
                 currentContext: obj,
                 templateCurrentContext: templateContext
             })
@@ -449,7 +449,7 @@ Handler.extend({
         for (var i = 0; i < params.length; i++) {
             Constant.RE_PLACEHOLDER.exec('')
             if (Constant.RE_PLACEHOLDER.test(params[i])) {
-                params[i] = Handler.placeholder(params[i], obj, templateContext, options)
+                params[i] = Mock.placeholder(params[i], obj, templateContext, options)
             }
         }
 
@@ -507,7 +507,7 @@ Handler.extend({
                 (originalKey !== templateCurrentContext[key]) // fix #15 避免自己依赖自己
             ) {
                 // 先计算被引用的属性值
-                templateCurrentContext[key] = Handler.gen(templateCurrentContext[key], key, {
+                templateCurrentContext[key] = Mock.gen(templateCurrentContext[key], key, {
                     currentContext: currentContext,
                     templateCurrentContext: templateCurrentContext
                 })
@@ -541,4 +541,6 @@ Handler.extend({
     }
 })
 
-module.exports = Handler
+Mock.mock = Mock.gen
+
+module.exports = Mock

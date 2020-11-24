@@ -1,24 +1,12 @@
 /* global require, chai, describe, before, it */
 /* global window */
 // 数据占位符定义（Data Placeholder Definition，DPD）
+const chai = require('chai')
+const Random = require('../src/random')
 var expect = chai.expect
-var Mock, Random, $, _, Random
 
 /* jshint -W061 */
 describe('Random', function() {
-    before(function(done) {
-        require(['mock', 'underscore', 'jquery'], function() {
-            Mock = arguments[0]
-            window.Random = Random = Mock.Random
-            _ = arguments[1]
-            $ = arguments[2]
-            expect(Mock).to.not.equal(undefined)
-            expect(_).to.not.equal(undefined)
-            expect($).to.not.equal(undefined)
-            done()
-        })
-    })
-
     function stringify(json) {
         return JSON.stringify(json /*, null, 4*/ )
     }
@@ -217,6 +205,7 @@ describe('Random', function() {
         })
     })
 
+    /*
     describe('Image', function() {
         doit('Random.image()', function(data) {
             expect(data).to.be.ok
@@ -237,6 +226,7 @@ describe('Random', function() {
             this.test.title = stringify(this.test.title) + ' => '
         })
     })
+    */
 
     var RE_COLOR = /^#[0-9a-fA-F]{6}$/
     var RE_COLOR_RGB = /^rgb\(\d{1,3}, \d{1,3}, \d{1,3}\)$/
@@ -296,21 +286,21 @@ describe('Random', function() {
 
         doit('Random.title()', function(data) {
             var words = data.split(' ')
-            _.each(words, function(word) {
+            words.forEach(function(word) {
                 expect(word[0]).to.equal(word[0].toUpperCase())
             })
             expect(words).to.have.length.within(3, 7)
         })
         doit('Random.title(4)', function(data) {
             var words = data.split(' ')
-            _.each(words, function(word) {
+            words.forEach(function(word) {
                 expect(word[0]).to.equal(word[0].toUpperCase())
             })
             expect(words).to.have.length(4)
         })
         doit('Random.title(3, 5)', function(data) {
             var words = data.split(' ')
-            _.each(words, function(word) {
+            words.forEach(function(word) {
                 expect(word[0]).to.equal(word[0].toUpperCase())
             })
             expect(words).to.have.length.within(3, 5)

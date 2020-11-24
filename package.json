@@ -1,38 +1,25 @@
 {
-  "name": "mockjs",
+  "name": "@graphi/mockjs",
   "title": "Mock.js",
-  "description": "生成随机数据 & 拦截 Ajax 请求",
-  "version": "1.0.1-beta3",
-  "homepage": "http://mockjs.com/",
+  "description": "生成随机数据 fork from mockjs",
+  "version": "1.0.0",
   "keywords": [
     "mock",
     "mockJSON",
     "mockAjax"
   ],
-  "author": "nuysoft@gmail.com",
-  "dependencies": {
-    "commander": "*"
-  },
+  "author": "lobos841@gmail.com",
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-connect": "^5.7.0",
-    "gulp-coveralls": "^0.1.4",
-    "gulp-istanbul": "^0.10.4",
-    "gulp-jshint": "^2.1.0",
-    "gulp-mocha": "^2.2.0",
-    "gulp-mocha-phantomjs": "^0.10.1",
-    "jshint": "^2.8.0",
-    "jshint-stylish": "^2.1.0",
-    "webpack": "^1.12.9"
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/nuysoft/Mock.git"
+    "url": "https://github.com/ihparg/Mock"
   },
-  "main": "./dist/mock.js",
+  "main": "./src/index.js",
   "scripts": {
-    "test": "gulp mocha",
-    "coveralls": "gulp coveralls"
+    "test": "mocha"
   },
   "bin": {
     "random": "bin/random"
@@ -44,6 +31,6 @@
     }
   ],
   "spm": {
-    "main": "dist/mock.js"
+    "main": "src/index.js"
   }
 }
